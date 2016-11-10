@@ -19,7 +19,7 @@ public void OnClientPostAdminCheck(int client)
 {
 	char m_szIpAdr[16], m_szUrl[128];
 	GetClientIP(client, m_szIpAdr, 16);
-	Format(m_szUrl, 128, "%s", m_szIpAdr);
+	Format(m_szUrl, 128, "%s%s", SEARCH_URL_HK, m_szIpAdr);
 
 	Handle hHandle = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, m_szUrl);
 	if(!hHandle || !SteamWorks_SetHTTPCallbacks(hHandle, OnHttpQueryCB) || !SteamWorks_SetHTTPRequestContextValue(hHandle, client) || !SteamWorks_SendHTTPRequest(hHandle))
