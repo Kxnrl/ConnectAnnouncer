@@ -3,8 +3,10 @@
 
 #pragma newdecls required
 
-#define SEARCH_URL_CN "https://csgogamers.com/searchip/?ip="
-#define SEARCH_URL_HK "https://irelia.me/ip.php?ip="
+#define SEARCH_URL_ZH "https://irelia.me/searchip/?ip="
+#define SEARCH_URL_EN "https://irelia.me/searchip/ip_en.php?ip="
+
+#define ZH_CN
 
 public Plugin myinfo = 
 {
@@ -19,7 +21,12 @@ public void OnClientPostAdminCheck(int client)
 {
 	char m_szIpAdr[16], m_szUrl[128];
 	GetClientIP(client, m_szIpAdr, 16);
-	Format(m_szUrl, 128, "%s%s", SEARCH_URL_HK, m_szIpAdr);
+
+#if defined ZH
+	Format(m_szUrl, 128, "%s%s", SEARCH_URL_ZH, m_szIpAdr);
+#else
+	Format(m_szUrl, 128, "%s%s", SEARCH_URL_EN, m_szIpAdr);
+#endif
 
 	Handle hHandle = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, m_szUrl);
 	if(!hHandle || !SteamWorks_SetHTTPCallbacks(hHandle, OnHttpQueryCB) || !SteamWorks_SetHTTPRequestContextValue(hHandle, client) || !SteamWorks_SendHTTPRequest(hHandle))
@@ -42,6 +49,10 @@ public int OnGetClientLocation(char[] szLoc, int client)
 	if(!IsClientInGame(client))
 		return;
 
+#if defined ZH
 	ReplaceString(szLoc, 256, "中国", "", false);
 	PrintToChatAll("[\x04CG\x01]\x01 \x04欢迎 \x0C%N \x05来自:%s", client, szLoc);
+#else
+	PrintToChatAll("[\x04CG\x01]\x01 \x04welcome \x0C%N \x05From:%s", client, szLoc);
+#endif
 }
