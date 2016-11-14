@@ -22,7 +22,7 @@ public void OnClientPostAdminCheck(int client)
 	char m_szIpAdr[16], m_szUrl[128];
 	GetClientIP(client, m_szIpAdr, 16);
 
-#if defined ZH
+#if defined ZH_CN
 	Format(m_szUrl, 128, "%s%s", SEARCH_URL_ZH, m_szIpAdr);
 #else
 	Format(m_szUrl, 128, "%s%s", SEARCH_URL_EN, m_szIpAdr);
@@ -49,7 +49,7 @@ public int OnGetClientLocation(char[] szLoc, int client)
 	if(!IsClientInGame(client))
 		return;
 
-#if defined ZH
+#if defined ZH_CN
 	ReplaceString(szLoc, 256, "中国", "", false);
 	PrintToChatAll("[\x04CG\x01]\x01 \x04欢迎 \x0C%N \x05来自:%s", client, szLoc);
 #else
