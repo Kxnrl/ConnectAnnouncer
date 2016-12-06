@@ -30,15 +30,19 @@ public void OnClientPostAdminCheck(int client)
 
 	Handle hHandle = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, m_szUrl);
 	if(!hHandle || !SteamWorks_SetHTTPCallbacks(hHandle, OnHttpQueryCB) || !SteamWorks_SetHTTPRequestContextValue(hHandle, client) || !SteamWorks_SendHTTPRequest(hHandle))
-		delete(hHandle);
+		CloseHandle(hHandle);
 }
 
 public int OnHttpQueryCB(Handle hHandle, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, int client)
 {
 	if(!IsClientInGame(client) || bFailure || !bRequestSuccessful || eStatusCode != k_EHTTPStatusCode200OK)
 	{
-		delete(hHandle);
+		CloseHandle(hHandle);
 		return;
+	}
+	else
+	{
+		LogError("SteamWorks: %sbFailure && %sbRequestSuccessful && eStatusCode[%d] Error Client: %N", bFailure ? "" : "!", bRequestSuccessful ? "" : "!", view_as<int>(eStatusCode), client);
 	}
 	
 	SteamWorks_GetHTTPResponseBodyCallback(hHandle, OnGetClientLocation, client);
